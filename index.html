@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AnimeVietSub Filter Panel Demo</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        body {
+            background: #111;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            font-family: 'Segoe UI', sans-serif;
+        }
+        .demo-container {
+            width: 100%;
+            max-width: 950px;
+            padding: 20px;
+        }
+        /* Hiển thị overlay dạng demo (luôn visible) */
+        #avs-overlay {
+            position: relative;
+            display: flex;
+            opacity: 1;
+            background: transparent;
+            backdrop-filter: none;
+            height: auto;
+        }
+        #avs-overlay .avs-panel {
+            transform: scale(1) translateY(0);
+            opacity: 1;
+        }
+        /* Nút float demo */
+        .demo-float-note {
+            text-align: center;
+            margin-top: 30px;
+            color: var(--text-secondary);
+        }
+    </style>
+</head>
+<body>
+    <div class="demo-container">
+        <!-- Bảng lọc (luôn hiện) -->
+        <div id="avs-overlay" class="active">
+            <div class="avs-panel">
+                <div class="avs-header">
+                    <h3 class="avs-title">⚡ Bộ Lọc Đa Năng V5.3</h3>
+                    <div class="avs-close">&times;</div>
+                </div>
+
+                <div class="avs-sec-label">Loại Phim</div>
+                <div class="avs-grid" id="grp-type">
+                    <div class="avs-chip active" data-val="all" data-group="type">Tất cả</div>
+                    <div class="avs-chip" data-val="list-le" data-group="type">Movie/OVA</div>
+                    <div class="avs-chip" data-val="list-bo" data-group="type">TV-Series</div>
+                    <div class="avs-chip" data-val="list-tron-bo" data-group="type">Trọn bộ</div>
+                </div>
+
+                <div class="avs-sec-label">Mùa</div>
+                <div class="avs-grid" id="grp-season">
+                    <div class="avs-chip active" data-val="all" data-group="season">Tất cả</div>
+                    <div class="avs-chip" data-val="winter" data-group="season">Đông</div>
+                    <div class="avs-chip" data-val="spring" data-group="season">Xuân</div>
+                    <div class="avs-chip" data-val="summer" data-group="season">Hạ</div>
+                    <div class="avs-chip" data-val="autumn" data-group="season">Thu</div>
+                </div>
+
+                <div class="avs-sec-label">Năm</div>
+                <div class="avs-grid" id="grp-year">
+                    <div class="avs-chip active" data-val="all" data-group="year">Tất cả</div>
+                    <div class="avs-chip" data-val="2026">2026</div>
+                    <div class="avs-chip" data-val="2025">2025</div>
+                    <div class="avs-chip" data-val="2024">2024</div>
+                    <div class="avs-chip" data-val="2023">2023</div>
+                    <div class="avs-chip" data-val="2022">2022</div>
+                    <div class="avs-chip" data-val="2021">2021</div>
+                    <div class="avs-chip" data-val="2020">2020</div>
+                    <div class="avs-chip" data-val="2019">2019</div>
+                    <div class="avs-chip" data-val="2018">2018</div>
+                    <div class="avs-chip" data-val="2017">2017</div>
+                    <div class="avs-chip" data-val="2016">2016</div>
+                    <div class="avs-chip" data-val="2015">2015</div>
+                    <div class="avs-chip" data-val="2014">2014</div>
+                    <div class="avs-chip" data-val="2013">2013</div>
+                </div>
+
+                <div class="avs-sec-label">Thể Loại (Chọn nhiều)</div>
+                <input type="text" id="avs-genre-search" placeholder="🔍 Tìm kiếm thể loại...">
+
+                <div class="avs-grid" id="grp-genre">
+                    <!-- Dữ liệu thể loại từ config -->
+                    <div class="avs-chip" data-val="1">Action</div>
+                    <div class="avs-chip" data-val="2">Adventure</div>
+                    <div class="avs-chip" data-val="46">Boys Love</div>
+                    <div class="avs-chip" data-val="44">Cartoon</div>
+                    <div class="avs-chip" data-val="47">Cổ Trang</div>
+                    <div class="avs-chip" data-val="3">Comedy</div>
+                    <div class="avs-chip" data-val="7">Ecchi</div>
+                    <div class="avs-chip" data-val="8">Fantasy</div>
+                    <div class="avs-chip" data-val="10">Harem</div>
+                    <div class="avs-chip" data-val="12">Horror</div>
+                    <div class="avs-chip" data-val="13">Josei</div>
+                    <div class="avs-chip" data-val="15">Magic</div>
+                    <div class="avs-chip" data-val="17">Mecha</div>
+                    <div class="avs-chip" data-val="19">Music</div>
+                    <div class="avs-chip" data-val="20">Mystery</div>
+                    <div class="avs-chip" data-val="22">Police</div>
+                    <div class="avs-chip" data-val="23">Psychological</div>
+                    <div class="avs-chip" data-val="24">Romance</div>
+                    <div class="avs-chip" data-val="26">School</div>
+                    <div class="avs-chip" data-val="27">Sci-Fi</div>
+                    <div class="avs-chip" data-val="28">Seinen</div>
+                    <div class="avs-chip" data-val="29">Shoujo</div>
+                    <div class="avs-chip" data-val="30">Shoujo Ai</div>
+                    <div class="avs-chip" data-val="31">Shounen</div>
+                    <div class="avs-chip" data-val="32">Shounen Ai</div>
+                    <div class="avs-chip" data-val="33">Slice of Life</div>
+                    <div class="avs-chip" data-val="35">Sports</div>
+                    <div class="avs-chip" data-val="37">Supernatural</div>
+                    <div class="avs-chip" data-val="38">Thriller</div>
+                    <div class="avs-chip" data-val="40">Yaoi</div>
+                    <div class="avs-chip" data-val="41">Yuri</div>
+                </div>
+
+                <button class="avs-btn-apply">🚀 LỌC PHIM NGAY</button>
+            </div>
+        </div>
+
+        <!-- Nút nổi mô phỏng -->
+        <div id="avs-float-btn" style="position: relative; bottom: auto; right: auto; margin: 30px auto 0;">⚡</div>
+        <div class="demo-float-note">* Nút nổi có thể kéo thả và lưu vị trí (demo).</div>
+    </div>
+
+    <script>
+        // Mô phỏng một vài tương tác cơ bản cho demo
+        document.querySelectorAll('.avs-chip').forEach(chip => {
+            chip.addEventListener('click', function() {
+                const group = this.closest('[id^="grp-"]');
+                if (!group) return;
+                if (group.id === 'grp-genre') {
+                    this.classList.toggle('active');
+                } else {
+                    group.querySelectorAll('.avs-chip').forEach(c => c.classList.remove('active'));
+                    this.classList.add('active');
+                }
+            });
+        });
+
+        document.getElementById('avs-genre-search').addEventListener('input', (e) => {
+            const keyword = e.target.value.toLowerCase();
+            document.querySelectorAll('#grp-genre .avs-chip').forEach(chip => {
+                chip.style.display = chip.textContent.toLowerCase().includes(keyword) ? 'block' : 'none';
+            });
+        });
+
+        document.querySelector('.avs-close').addEventListener('click', () => {
+            alert('Trong userscript, nút này đóng bảng lọc.');
+        });
+    </script>
+</body>
+</html>
