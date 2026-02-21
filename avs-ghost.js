@@ -1,11 +1,3 @@
-// ==UserScript==
-// @name         AVS Ghost
-// @namespace    https://github.com/Hibandd122/animevietsub
-// @version      1.1
-// @description  Ghost mode and fullscreen handling
-// @author       HolaCanh
-// ==/UserScript==
-
 window.AVS_Ghost = {
     setupFullscreenListener(app) {
         document.addEventListener('fullscreenchange', () => this.handleFullscreenChange(app));
