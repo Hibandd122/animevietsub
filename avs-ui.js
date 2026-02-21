@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         AVS UI (Self-initializing)
 // @namespace    https://github.com/Hibandd122/animevietsub
-// @version      2.0
+// @version      2.1
 // @description  UI components with dependency check and auto-init.
 // @author       HolaCanh
 // ==/UserScript==
@@ -9,11 +9,12 @@
 (function() {
     'use strict';
 
-    // Hàm chờ dependencies
+    // Hàm chờ dependencies (config, storage, ghost)
     function waitForDependencies(callback, timeout = 15000) {
         const start = Date.now();
         const check = () => {
             if (window.AVS_Storage && window.AVS_CONFIG && window.AVS_Ghost) {
+                console.log('[AVS-UI] All dependencies ready, initializing UI...');
                 callback();
             } else if (Date.now() - start > timeout) {
                 console.error('[AVS-UI] Dependencies not loaded after timeout', {
@@ -28,7 +29,7 @@
         check();
     }
 
-    // Định nghĩa class AVS_UI
+    // Định nghĩa class AVSApp
     class AVSApp {
         constructor() {
             const saved = window.AVS_Storage.get('settings', {});
@@ -460,10 +461,12 @@
         }
     }
 
-    // Chờ dependencies và khởi tạo
+    // Bắt đầu chờ dependencies và khởi tạo
     waitForDependencies(() => {
-        console.log('[AVS-UI] All dependencies ready, initializing UI...');
-        window.AVS_UI = AVSApp;
-        new AVSApp();
+        // Đảm bảo chỉ khởi tạo một lần
+        if (!window._avsUiInitialized) {
+            window._avsUiInitialized = true;
+            new AVSApp();
+        }
     });
 })();
