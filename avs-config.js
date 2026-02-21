@@ -1,13 +1,5 @@
-// ==UserScript==
-// @name         AVS Config
-// @namespace    https://github.com/Hibandd122/animevietsub
-// @version      1.0
-// @description  Cấu hình cho AnimeVietsub Ultimate
-// @author       HolaCanh
-// ==/UserScript==
-
 window.AVS_CONFIG = {
-    version: '6.0',
+    version: '7.0',
     types: [
         { val: 'all', txt: 'Tất cả' },
         { val: 'list-le', txt: 'Movie/OVA' },
@@ -69,8 +61,6 @@ window.AVS_CONFIG = {
         theme: 'netflix',
         volumeStep: 5,
         disableFloatAnimation: false,
-        autoMarkWatched: true,
-        watchedThreshold: 300,
         shortcuts: {
             ghost: 'H',
             skip: 'S',
@@ -79,12 +69,7 @@ window.AVS_CONFIG = {
             backward5: 'ArrowLeft',
             toggleFilter: 'F',
             volumeUp: 'ArrowUp',
-            volumeDown: 'ArrowDown',
-            bookmark: 'B'
+            volumeDown: 'ArrowDown'
         }
-    },
-    cssUrls: {
-        scriptUI: 'https://raw.githubusercontent.com/Hibandd122/animevietsub/main/script-ui.css',
-        webEnhancement: 'https://raw.githubusercontent.com/Hibandd122/animevietsub/main/web-enhancement.css'
     }
 };
