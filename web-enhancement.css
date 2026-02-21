@@ -1,547 +1,212 @@
 /* =============================================
-   WEB ENHANCEMENT FOR ANIMEVIETSUB
-   Làm đẹp toàn bộ giao diện: header, breadcrumb,
-   player, danh sách tập, thông tin phim, sidebar...
+   WEB ENHANCEMENT FOR ANIMEVIETSUB (LITE)
+   Chỉ cải thiện thẩm mỹ, không phá vỡ layout
    ============================================= */
 
-/* Reset & Global */
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-}
-
-body {
-    background: #0a0a0a !important;
-    color: #e0e0e0 !important;
-    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif !important;
-    line-height: 1.6;
-}
-
+/* Chỉ áp dụng cho container chính */
 .Container {
-    max-width: 1400px !important;
-    margin: 0 auto !important;
-    padding: 20px 25px !important;
-    width: 100% !important;
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 15px 20px;
 }
 
-/* ===== BREADCRUMB ===== */
+/* Breadcrumb – giữ nguyên nhưng thêm hiệu ứng nhẹ */
 .breadcrumb {
-    background: rgba(20, 20, 30, 0.7) !important;
-    backdrop-filter: blur(12px) !important;
-    -webkit-backdrop-filter: blur(12px) !important;
-    border: 1px solid rgba(255, 255, 255, 0.05) !important;
-    border-radius: 40px !important;
-    padding: 12px 24px !important;
-    margin-bottom: 30px !important;
-    display: flex !important;
-    flex-wrap: wrap !important;
-    gap: 8px !important;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5) !important;
+    background: rgba(20, 20, 30, 0.5);
+    backdrop-filter: blur(5px);
+    border-radius: 40px;
+    padding: 8px 20px;
+    margin-bottom: 25px;
+    border: 1px solid rgba(255,255,255,0.05);
 }
 
-.breadcrumb li {
-    list-style: none !important;
-    display: flex !important;
-    align-items: center !important;
-}
-
-.breadcrumb li a,
-.breadcrumb li span {
-    color: #aaa !important;
-    text-decoration: none !important;
-    font-size: 14px !important;
-    font-weight: 500 !important;
-    transition: color 0.2s !important;
-    padding: 4px 8px !important;
-    border-radius: 30px !important;
+.breadcrumb li a {
+    color: #ccc;
 }
 
 .breadcrumb li a:hover {
-    color: #fff !important;
-    background: rgba(229, 9, 20, 0.2) !important;
+    color: #e50914;
 }
 
-.breadcrumb li:not(:last-child)::after {
-    content: "/" !important;
-    color: #444 !important;
-    margin: 0 8px !important;
-    font-weight: 300 !important;
-}
-
-/* ===== PLAYER BLOCK ===== */
+/* Player block – bo góc nhẹ, thêm shadow */
 #watch-block {
-    background: #121212 !important;
-    border-radius: 30px !important;
-    overflow: hidden !important;
-    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.8) !important;
-    margin-bottom: 30px !important;
-    border: 1px solid rgba(255, 255, 255, 0.05) !important;
+    background: #111;
+    border-radius: 20px;
+    overflow: hidden;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.7);
+    margin-bottom: 25px;
+    border: 1px solid rgba(255,255,255,0.05);
 }
 
-.media-player {
-    border-radius: 30px 30px 0 0 !important;
-}
-
-/* History notification */
+/* History notification – giữ nguyên */
 .History-notif {
-    background: rgba(229, 9, 20, 0.1) !important;
-    border-bottom: 1px solid rgba(229, 9, 20, 0.2) !important;
-    padding: 14px 20px !important;
-    text-align: center !important;
-    font-size: 14px !important;
-    color: #fff !important;
-    backdrop-filter: blur(5px) !important;
+    background: rgba(229,9,20,0.1);
+    border-bottom: 1px solid rgba(229,9,20,0.2);
+    padding: 10px 15px;
+    text-align: center;
+    font-size: 14px;
 }
 
-.History-notif a {
-    color: #ff6b6b !important;
-    font-weight: 600 !important;
-    text-decoration: none !important;
-    margin-left: 5px !important;
-}
-
-.History-notif a:hover {
-    text-decoration: underline !important;
-}
-
-/* ===== SERVER & EPISODE LIST ===== */
+/* Danh sách tập – cải thiện nhưng không dùng !important tràn lan */
 #list-server {
-    background: #121212 !important;
-    border-radius: 30px !important;
-    padding: 25px !important;
-    margin-top: 25px !important;
-    border: 1px solid rgba(255, 255, 255, 0.05) !important;
-    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.5) !important;
-}
-
-.server-group {
-    margin-bottom: 20px !important;
-}
-
-.server-name {
-    color: #fff !important;
-    font-size: 20px !important;
-    font-weight: 700 !important;
-    margin-bottom: 20px !important;
-    display: inline-block !important;
-    background: linear-gradient(135deg, #e50914, #ff4d4d) !important;
-    -webkit-background-clip: text !important;
-    -webkit-text-fill-color: transparent !important;
-    border-left: 4px solid #e50914 !important;
-    padding-left: 15px !important;
+    background: #111;
+    border-radius: 20px;
+    padding: 20px;
+    margin-top: 20px;
+    border: 1px solid rgba(255,255,255,0.05);
 }
 
 .list-episode {
-    display: flex !important;
-    flex-wrap: wrap !important;
-    gap: 12px !important;
-    margin: 0 !important;
-    padding: 0 !important;
-}
-
-.episode {
-    list-style: none !important;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
 }
 
 .episode a {
-    display: inline-flex !important;
-    align-items: center !important;
-    justify-content: center !important;
-    min-width: 50px !important;
-    height: 45px !important;
-    padding: 0 18px !important;
-    background: rgba(255, 255, 255, 0.03) !important;
-    border: 1px solid rgba(255, 255, 255, 0.1) !important;
-    border-radius: 30px !important;
-    color: #ccc !important;
-    font-weight: 600 !important;
-    font-size: 15px !important;
-    text-decoration: none !important;
-    transition: all 0.3s cubic-bezier(0.2, 0.9, 0.4, 1) !important;
-    position: relative !important;
-    overflow: hidden !important;
-}
-
-.episode a::before {
-    content: '' !important;
-    position: absolute !important;
-    top: 50% !important;
-    left: 50% !important;
-    width: 0 !important;
-    height: 0 !important;
-    border-radius: 50% !important;
-    background: rgba(229, 9, 20, 0.3) !important;
-    transform: translate(-50%, -50%) !important;
-    transition: width 0.5s, height 0.5s !important;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 45px;
+    height: 40px;
+    padding: 0 15px;
+    background: rgba(255,255,255,0.05);
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 30px;
+    color: #ddd;
+    font-weight: 500;
+    font-size: 14px;
+    transition: all 0.2s;
 }
 
 .episode a:hover {
-    background: #e50914 !important;
-    border-color: #e50914 !important;
-    color: white !important;
-    transform: translateY(-3px) !important;
-    box-shadow: 0 8px 20px rgba(229, 9, 20, 0.4) !important;
-}
-
-.episode a:hover::before {
-    width: 150px !important;
-    height: 150px !important;
+    background: #e50914;
+    color: white;
+    border-color: #e50914;
+    transform: translateY(-2px);
 }
 
 .episode.playing a {
-    background: #e50914 !important;
-    color: white !important;
-    border-color: #e50914 !important;
-    box-shadow: 0 0 20px rgba(229, 9, 20, 0.6) !important;
+    background: #e50914;
+    color: white;
+    border-color: #e50914;
+    box-shadow: 0 0 15px rgba(229,9,20,0.5);
 }
 
-/* ===== MOVIE INFO (SINGLE PAGE) ===== */
+/* Thông tin phim – bố cục linh hoạt */
 .TPost.Single {
-    background: #121212 !important;
-    border-radius: 30px !important;
-    padding: 30px !important;
-    margin-top: 30px !important;
-    border: 1px solid rgba(255, 255, 255, 0.05) !important;
-    display: flex !important;
-    flex-wrap: wrap !important;
-    gap: 35px !important;
-    position: relative !important;
-    overflow: hidden !important;
-    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.6) !important;
+    background: #111;
+    border-radius: 20px;
+    padding: 25px;
+    margin-top: 25px;
+    border: 1px solid rgba(255,255,255,0.05);
+    display: flex;
+    flex-wrap: wrap;
+    gap: 25px;
 }
 
 .TPost.Single .Image {
-    flex: 0 0 220px !important;
-    border-radius: 20px !important;
-    overflow: hidden !important;
-    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.8) !important;
-    transition: transform 0.4s !important;
-}
-
-.TPost.Single .Image:hover {
-    transform: scale(1.02) !important;
-}
-
-.TPost.Single .Image img {
-    width: 100% !important;
-    height: auto !important;
-    display: block !important;
+    flex: 0 0 200px;
+    border-radius: 15px;
+    overflow: hidden;
 }
 
 .TPost.Single .Title {
-    font-size: 32px !important;
-    font-weight: 800 !important;
-    color: #fff !important;
-    margin: 0 0 8px 0 !important;
-    line-height: 1.2 !important;
-    letter-spacing: -0.5px !important;
+    font-size: 28px;
+    font-weight: 700;
+    color: #fff;
+    margin: 0 0 5px;
 }
 
 .TPost.Single .SubTitle {
-    color: #aaa !important;
-    font-size: 18px !important;
-    margin-bottom: 20px !important;
-    font-weight: 400 !important;
+    color: #aaa;
+    font-size: 16px;
+    margin-bottom: 15px;
 }
 
 .TPost.Single .Description {
-    color: #b0b0b0 !important;
-    line-height: 1.8 !important;
-    margin-bottom: 25px !important;
-    max-width: 800px !important;
-    font-size: 15px !important;
+    color: #bbb;
+    line-height: 1.7;
+    font-size: 15px;
 }
 
-.TPost.Single footer {
-    flex: 1 !important;
-    min-width: 300px !important;
-}
-
-.TPostBg {
-    position: absolute !important;
-    top: 0 !important;
-    left: 0 !important;
-    width: 100% !important;
-    height: 100% !important;
-    object-fit: cover !important;
-    opacity: 0.07 !important;
-    z-index: 0 !important;
-    pointer-events: none !important;
-    filter: blur(2px) !important;
-}
-
-.VotesCn {
-    margin-bottom: 20px !important;
-    display: flex !important;
-    align-items: center !important;
-    gap: 15px !important;
-}
-
-.Prct {
-    width: 70px !important;
-    height: 70px !important;
-}
-
-/* ===== CONTROL PLAYER BUTTONS ===== */
+/* Thanh điều khiển player – nhẹ nhàng */
 .ControlPlayer {
-    display: flex !important;
-    flex-wrap: wrap !important;
-    gap: 10px !important;
-    background: #0e0e0e !important;
-    padding: 18px !important;
-    border-radius: 30px !important;
-    margin: 20px 0 10px !important;
-    border: 1px solid rgba(255, 255, 255, 0.05) !important;
-    align-items: center !important;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    background: #0e0e0e;
+    padding: 15px;
+    border-radius: 20px;
+    margin: 15px 0;
+    border: 1px solid rgba(255,255,255,0.05);
 }
 
 .ControlPlayer .Lnk {
-    background: rgba(255, 255, 255, 0.03) !important;
-    border: 1px solid rgba(255, 255, 255, 0.08) !important;
-    border-radius: 40px !important;
-    padding: 10px 22px !important;
-    color: #ccc !important;
-    font-size: 14px !important;
-    font-weight: 500 !important;
-    transition: all 0.2s !important;
-    cursor: pointer !important;
-    display: inline-flex !important;
-    align-items: center !important;
-    gap: 8px !important;
-    text-decoration: none !important;
-}
-
-.ControlPlayer .Lnk i,
-.ControlPlayer .Lnk .AAIco {
-    font-size: 18px !important;
+    background: rgba(255,255,255,0.03);
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 30px;
+    padding: 8px 18px;
+    color: #ccc;
+    font-size: 13px;
+    transition: all 0.2s;
 }
 
 .ControlPlayer .Lnk:hover {
-    background: #e50914 !important;
-    color: white !important;
-    border-color: #e50914 !important;
-    transform: translateY(-2px) !important;
-    box-shadow: 0 5px 15px rgba(229, 9, 20, 0.3) !important;
+    background: #e50914;
+    color: white;
+    border-color: #e50914;
 }
 
-/* ===== RELATED MOVIES (CAROUSEL) ===== */
-.MovieListRelated {
-    background: transparent !important;
-    margin-top: 40px !important;
-}
-
-.owl-carousel .TPostMv {
-    background: rgba(20, 20, 30, 0.5) !important;
-    border-radius: 20px !important;
-    overflow: hidden !important;
-    backdrop-filter: blur(5px) !important;
-    border: 1px solid rgba(255, 255, 255, 0.05) !important;
-    transition: transform 0.3s, box-shadow 0.3s !important;
-    margin: 0 5px !important;
-}
-
-.TPostMv:hover {
-    transform: translateY(-8px) !important;
-    box-shadow: 0 20px 30px -10px rgba(0, 0, 0, 0.8) !important;
-    border-color: rgba(229, 9, 20, 0.3) !important;
-}
-
-.TPostMv .Image {
-    border-radius: 20px 20px 0 0 !important;
-    overflow: hidden !important;
-    aspect-ratio: 2/3 !important;
-}
-
-.TPostMv .Image img {
-    width: 100% !important;
-    height: 100% !important;
-    object-fit: cover !important;
-    transition: transform 0.4s !important;
-}
-
-.TPostMv:hover .Image img {
-    transform: scale(1.1) !important;
-}
-
-.TPostMv .Title {
-    padding: 15px 12px !important;
-    font-size: 14px !important;
-    font-weight: 600 !important;
-    text-align: center !important;
-    color: #fff !important;
-    white-space: nowrap !important;
-    overflow: hidden !important;
-    text-overflow: ellipsis !important;
-}
-
-.anime-extras {
-    position: absolute !important;
-    bottom: 10px !important;
-    left: 10px !important;
-    background: rgba(0, 0, 0, 0.7) !important;
-    backdrop-filter: blur(5px) !important;
-    border-radius: 20px !important;
-    padding: 4px 12px !important;
-    font-size: 12px !important;
-    color: #ffd966 !important;
-    border: 1px solid rgba(255, 255, 255, 0.1) !important;
-}
-
-/* ===== SIDEBAR WIDGETS ===== */
-.widget-area {
-    display: flex !important;
-    flex-direction: column !important;
-    gap: 25px !important;
-}
-
+/* Sidebar widgets – tinh tế */
 .widget-area .Wdgt {
-    background: #121212 !important;
-    border-radius: 25px !important;
-    padding: 25px !important;
-    border: 1px solid rgba(255, 255, 255, 0.05) !important;
-    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.5) !important;
-    transition: transform 0.3s !important;
-}
-
-.widget-area .Wdgt:hover {
-    transform: translateY(-3px) !important;
+    background: #111;
+    border-radius: 20px;
+    padding: 20px;
+    margin-bottom: 25px;
+    border: 1px solid rgba(255,255,255,0.05);
 }
 
 .widget-area .Title {
-    font-size: 20px !important;
-    font-weight: 700 !important;
-    color: #fff !important;
-    margin-bottom: 20px !important;
-    display: inline-block !important;
-    border-bottom: 3px solid #e50914 !important;
-    padding-bottom: 8px !important;
-    letter-spacing: -0.3px !important;
+    font-size: 18px;
+    font-weight: 600;
+    color: #fff;
+    margin-bottom: 15px;
+    border-bottom: 2px solid #e50914;
+    padding-bottom: 8px;
+    display: inline-block;
 }
 
-.MovieList {
-    list-style: none !important;
-    margin: 0 !important;
-    padding: 0 !important;
+/* Danh sách phim liên quan – carousel đẹp hơn */
+.MovieListRelated .TPostMv {
+    background: #1a1a1a;
+    border-radius: 15px;
+    overflow: hidden;
+    transition: transform 0.2s;
 }
 
-.MovieList li {
-    margin-bottom: 15px !important;
-    border-bottom: 1px dashed rgba(255, 255, 255, 0.1) !important;
-    padding-bottom: 12px !important;
+.TPostMv:hover {
+    transform: translateY(-5px);
 }
 
-.MovieList li:last-child {
-    border-bottom: none !important;
+.TPostMv .Title {
+    padding: 10px;
+    font-size: 14px;
+    text-align: center;
+    color: #fff;
 }
 
-.MovieList li a {
-    color: #ccc !important;
-    text-decoration: none !important;
-    font-size: 15px !important;
-    display: flex !important;
-    justify-content: space-between !important;
-    align-items: center !important;
-    transition: color 0.2s !important;
-}
-
-.MovieList li a:hover {
-    color: #e50914 !important;
-}
-
-.MovieList li a span:last-child {
-    background: rgba(229, 9, 20, 0.15) !important;
-    padding: 3px 10px !important;
-    border-radius: 30px !important;
-    font-size: 12px !important;
-    font-weight: 600 !important;
-    color: #ff6b6b !important;
-}
-
-/* ===== TAGS & KEYWORDS ===== */
-.tag-list-main {
-    background: #121212 !important;
-    border-radius: 25px !important;
-    padding: 20px !important;
-    border: 1px solid rgba(255, 255, 255, 0.05) !important;
-}
-
-.tag-list-main ul {
-    display: flex !important;
-    flex-wrap: wrap !important;
-    gap: 10px !important;
-    list-style: none !important;
-    padding: 0 !important;
-}
-
-.tag-list-main .tag-item a {
-    background: rgba(255, 255, 255, 0.03) !important;
-    border: 1px solid rgba(255, 255, 255, 0.08) !important;
-    border-radius: 30px !important;
-    padding: 8px 16px !important;
-    color: #aaa !important;
-    font-size: 13px !important;
-    text-decoration: none !important;
-    transition: all 0.2s !important;
-    display: inline-block !important;
-}
-
-.tag-list-main .tag-item a:hover {
-    background: #e50914 !important;
-    color: white !important;
-    border-color: #e50914 !important;
-}
-
-/* ===== SCROLLBAR ===== */
+/* Scrollbar đẹp */
 ::-webkit-scrollbar {
-    width: 8px;
-    height: 8px;
+    width: 6px;
+    height: 6px;
 }
-
 ::-webkit-scrollbar-track {
     background: #1a1a1a;
 }
-
 ::-webkit-scrollbar-thumb {
     background: #444;
-    border-radius: 4px;
+    border-radius: 3px;
 }
-
 ::-webkit-scrollbar-thumb:hover {
     background: #e50914;
-}
-
-/* ===== RESPONSIVE ===== */
-@media (max-width: 992px) {
-    .TPost.Single {
-        flex-direction: column !important;
-        align-items: center !important;
-        text-align: center !important;
-    }
-    
-    .TPost.Single .Image {
-        flex: 0 0 auto !important;
-        max-width: 250px !important;
-    }
-    
-    .ControlPlayer {
-        justify-content: center !important;
-    }
-}
-
-@media (max-width: 768px) {
-    .Container {
-        padding: 15px !important;
-    }
-    
-    .breadcrumb {
-        padding: 10px 16px !important;
-    }
-    
-    .episode a {
-        min-width: 40px !important;
-        height: 38px !important;
-        padding: 0 12px !important;
-        font-size: 13px !important;
-    }
 }
