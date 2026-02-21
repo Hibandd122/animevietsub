@@ -1,5 +1,5 @@
 /* =============================================
-   SCRIPT UI COMPONENTS - NÂNG CẤP
+   SCRIPT UI COMPONENTS - NÂNG CẤP (Glassmorphism)
    Nút float, overlay, bảng settings, bookmark list, toast...
    ============================================= */
 
@@ -24,55 +24,45 @@ body[data-avs-theme="spotify"] { --primary: #1DB954; --primary-dark: #179443; --
 body[data-avs-theme="samsung"] { --primary: #1428A0; --primary-dark: #0f1e7a; --primary-light: #3d5afe; --primary-glow: rgba(20, 40, 160, 0.4); }
 body[data-avs-theme="apple"] { --primary: #ffffff; --primary-dark: #dddddd; --primary-light: #ffffff; --primary-glow: rgba(255, 255, 255, 0.4); }
 
-/* ===== FLOATING BUTTON ===== */
+/* ===== FLOATING BUTTON - PHONG CÁCH GLASSMORPHISM CAO CẤP ===== */
 #avs-float-btn {
     position: fixed;
     bottom: 30px;
     right: 30px;
-    width: 64px;
-    height: 64px;
-    background: var(--bg-glass);
-    color: var(--primary);
+    width: 70px;
+    height: 70px;
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(15px) saturate(180%);
+    -webkit-backdrop-filter: blur(15px) saturate(180%);
+    color: white;
     border-radius: 50%;
-    backdrop-filter: blur(16px) saturate(180%);
-    -webkit-backdrop-filter: blur(16px) saturate(180%);
-    border: 1.5px solid var(--border-glass);
-    box-shadow: var(--shadow-glass), 0 0 0 0 var(--primary-glow);
     display: flex;
     justify-content: center;
     align-items: center;
-    font-size: 32px;
+    font-size: 36px;
     cursor: grab;
     z-index: 999999;
-    transition: all 0.3s var(--transition-spring);
-    animation: gentle-float 4s ease-in-out infinite;
-    user-select: none;
-    will-change: transform, box-shadow;
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3), 0 0 0 2px rgba(229, 9, 20, 0.3);
+    transition: all 0.3s cubic-bezier(0.2, 0.9, 0.4, 1);
+}
+
+#avs-float-btn:hover {
+    background: rgba(229, 9, 20, 0.3);
+    border-color: #e50914;
+    transform: scale(1.1) rotate(5deg);
+    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.4), 0 0 0 3px rgba(229, 9, 20, 0.5);
 }
 
 #avs-float-btn:active {
     cursor: grabbing;
-}
-
-@keyframes gentle-float {
-    0%, 100% { transform: translateY(0) scale(1); }
-    50% { transform: translateY(-6px) scale(1.02); }
-}
-
-#avs-float-btn:hover {
-    transform: scale(1.12) rotate(6deg);
-    box-shadow: var(--shadow-glass), var(--shadow-glow);
-    border-color: var(--primary);
-    background: var(--bg-glass-hover);
+    transform: scale(1.05) rotate(2deg);
 }
 
 #avs-float-btn.dragging {
     transition: none;
-    animation: none;
-    transform: scale(1.1);
     opacity: 0.9;
     cursor: grabbing;
-    box-shadow: 0 20px 40px -5px rgba(0, 0, 0, 0.6);
 }
 
 /* ===== OVERLAY & PANEL ===== */
