@@ -1,20 +1,19 @@
 // ==UserScript==
-// @name         AVS UI (Self-initializing)
+// @name         AVS UI (Auto-init)
 // @namespace    https://github.com/Hibandd122/animevietsub
 // @version      2.1
-// @description  UI components with dependency check and auto-init.
+// @description  UI tự khởi tạo khi dependencies sẵn sàng.
 // @author       HolaCanh
 // ==/UserScript==
 
 (function() {
     'use strict';
 
-    // Hàm chờ dependencies (config, storage, ghost)
-    function waitForDependencies(callback, timeout = 15000) {
+    // Hàm chờ dependencies với timeout
+    function waitForDependencies(callback, timeout = 10000) {
         const start = Date.now();
         const check = () => {
             if (window.AVS_Storage && window.AVS_CONFIG && window.AVS_Ghost) {
-                console.log('[AVS-UI] All dependencies ready, initializing UI...');
                 callback();
             } else if (Date.now() - start > timeout) {
                 console.error('[AVS-UI] Dependencies not loaded after timeout', {
@@ -23,13 +22,13 @@
                     ghost: !!window.AVS_Ghost
                 });
             } else {
-                setTimeout(check, 100);
+                setTimeout(check, 50); // Kiểm tra nhanh hơn
             }
         };
         check();
     }
 
-    // Định nghĩa class AVSApp
+    // Định nghĩa class AVSApp (giữ nguyên logic, nhưng đảm bảo gán vào window)
     class AVSApp {
         constructor() {
             const saved = window.AVS_Storage.get('settings', {});
@@ -60,19 +59,16 @@
         }
 
         setupUI() {
-            // Tìm nút float đã có (do emergency button tạo) hoặc tạo mới
+            // Tìm nút float đã có
             this.floatBtn = document.getElementById('avs-float-btn');
             if (!this.floatBtn) {
-                console.warn('[AVS-UI] Float button not found, creating new one.');
+                console.warn('[AVS-UI] Float button missing, creating...');
                 this.floatBtn = document.createElement('div');
                 this.floatBtn.id = 'avs-float-btn';
                 this.floatBtn.innerHTML = '⚡';
                 document.body.appendChild(this.floatBtn);
-            } else {
-                console.log('[AVS-UI] Found existing float button.');
             }
 
-            // Khôi phục vị trí đã lưu
             const savedPos = window.AVS_Storage.get('floatPos', null);
             if (savedPos && typeof savedPos.left === 'number' && typeof savedPos.top === 'number') {
                 this.floatBtn.style.left = savedPos.left + 'px';
@@ -81,7 +77,6 @@
                 this.floatBtn.style.bottom = 'auto';
             }
 
-            // Tạo overlay
             this.overlay = document.createElement('div');
             this.overlay.id = 'avs-overlay';
             this.overlay.innerHTML = this.generatePanelHTML();
@@ -114,11 +109,11 @@
                 <div class="avs-settings-group">
                     <div class="avs-settings-title">⚙️ Cài đặt nhanh</div>
                     <div class="avs-setting-item">
-                        <label>Tự động toàn màn hình (khi click lần đầu)</label>
+                        <label>Tự động toàn màn hình</label>
                         <input type="checkbox" id="avs-set-auto-fullscreen" ${this.settings.autoFullscreen ? 'checked' : ''}>
                     </div>
                     <div class="avs-setting-item">
-                        <label>Ghost Mode mặc định (tự động khi fullscreen)</label>
+                        <label>Ghost Mode mặc định</label>
                         <input type="checkbox" id="avs-set-ghost-mode" ${this.settings.ghostMode ? 'checked' : ''}>
                     </div>
                     <div class="avs-setting-item">
@@ -129,7 +124,7 @@
                         </div>
                     </div>
                     <div class="avs-setting-item">
-                        <label>Tắt hiệu ứng float (nút không bay lên xuống)</label>
+                        <label>Tắt hiệu ứng float</label>
                         <input type="checkbox" id="avs-set-disable-float" ${this.settings.disableFloatAnimation ? 'checked' : ''}>
                     </div>
                 </div>
@@ -461,9 +456,11 @@
         }
     }
 
-    // Bắt đầu chờ dependencies và khởi tạo
+    // Chờ dependencies và khởi tạo
     waitForDependencies(() => {
-        // Đảm bảo chỉ khởi tạo một lần
+        console.log('[AVS-UI] All dependencies ready, initializing UI...');
+        window.AVS_UI = AVSApp;
+        // Chỉ khởi tạo một lần
         if (!window._avsUiInitialized) {
             window._avsUiInitialized = true;
             new AVSApp();
