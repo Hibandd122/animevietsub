@@ -1,8 +1,8 @@
 // ==UserScript==
 // @name         AVS UI
 // @namespace    https://github.com/Hibandd122/animevietsub
-// @version      1.1
-// @description  UI components and main logic (filter, settings, hotkeys) – no bookmark
+// @version      1.3
+// @description  UI components and main logic (filter, settings, hotkeys) – no bookmark. Đã sửa lỗi tạo nút float.
 // @author       HolaCanh
 // ==/UserScript==
 
@@ -14,7 +14,6 @@ window.AVS_UI = class AVSApp {
     }
 
     init() {
-        // AntiAds sẽ được khởi tạo bên ngoài
         if (document.readyState === 'loading') {
             document.addEventListener('DOMContentLoaded', () => this.setup());
         } else {
@@ -38,12 +37,20 @@ window.AVS_UI = class AVSApp {
     }
 
     setupUI() {
-        // Nút float
-        this.floatBtn = document.createElement('div');
-        this.floatBtn.id = 'avs-float-btn';
-        this.floatBtn.innerHTML = '⚡';
-        document.body.appendChild(this.floatBtn);
+        // Nếu nút float đã tồn tại (do fallback), thì không tạo lại
+        if (document.getElementById('avs-float-btn')) {
+            this.floatBtn = document.getElementById('avs-float-btn');
+            // Gỡ bỏ fallback style để tránh xung đột
+            const fallbackStyle = document.getElementById('avs-fallback-style');
+            if (fallbackStyle) fallbackStyle.remove();
+        } else {
+            this.floatBtn = document.createElement('div');
+            this.floatBtn.id = 'avs-float-btn';
+            this.floatBtn.innerHTML = '⚡';
+            document.body.appendChild(this.floatBtn);
+        }
 
+        // Load vị trí đã lưu
         const savedPos = window.AVS_Storage.get('floatPos', null);
         if (savedPos && typeof savedPos.left === 'number' && typeof savedPos.top === 'number') {
             this.floatBtn.style.left = savedPos.left + 'px';
@@ -52,7 +59,7 @@ window.AVS_UI = class AVSApp {
             this.floatBtn.style.bottom = 'auto';
         }
 
-        // Overlay
+        // Tạo overlay
         this.overlay = document.createElement('div');
         this.overlay.id = 'avs-overlay';
         this.overlay.innerHTML = this.generatePanelHTML();
@@ -103,7 +110,6 @@ window.AVS_UI = class AVSApp {
                     <label>Tắt hiệu ứng float (nút không bay lên xuống)</label>
                     <input type="checkbox" id="avs-set-disable-float" ${this.settings.disableFloatAnimation ? 'checked' : ''}>
                 </div>
-                <!-- Đã loại bỏ auto-mark -->
             </div>
         `;
 
@@ -126,8 +132,6 @@ window.AVS_UI = class AVSApp {
                 <div class="avs-sec-label">Thể Loại (Chọn nhiều)</div>
                 <input type="text" id="avs-genre-search" placeholder="🔍 Tìm kiếm thể loại...">
                 <div class="avs-grid" id="grp-genre">${genreChips}</div>
-
-                <!-- Đã loại bỏ phần bookmark list -->
 
                 ${settingsHTML}
 
@@ -176,7 +180,6 @@ window.AVS_UI = class AVSApp {
 
                 if (!isDragging) {
                     this.overlay.classList.add('active');
-                    // Không cần render bookmark list
                 } else {
                     const rect = this.floatBtn.getBoundingClientRect();
                     window.AVS_Storage.set('floatPos', { left: rect.left, top: rect.top });
@@ -281,8 +284,6 @@ window.AVS_UI = class AVSApp {
                 }
             });
         }
-
-        // Đã loại bỏ auto-mark
     }
 
     saveSettings() {
@@ -323,8 +324,6 @@ window.AVS_UI = class AVSApp {
                 }
             }, { once: true });
         }
-
-        // Đã loại bỏ jump time từ bookmark
     }
 
     setupHotkeys() {
@@ -393,10 +392,7 @@ window.AVS_UI = class AVSApp {
 
             if (key === shortcuts.toggleFilter) {
                 this.overlay.classList.toggle('active');
-                // Không cần render bookmark list
             }
-
-            // Đã loại bỏ bookmark key
         });
     }
 
