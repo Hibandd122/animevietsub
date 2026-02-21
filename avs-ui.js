@@ -1,34 +1,32 @@
 // ==UserScript==
-// @name         AVS UI (Auto-init)
+// @name         AVS UI (Stable, Self-initializing)
 // @namespace    https://github.com/Hibandd122/animevietsub
 // @version      2.1
-// @description  UI tự khởi tạo khi dependencies sẵn sàng.
+// @description  UI components with dependency check and auto-init.
 // @author       HolaCanh
 // ==/UserScript==
 
 (function() {
     'use strict';
 
-    // Hàm chờ dependencies với timeout
-    function waitForDependencies(callback, timeout = 10000) {
+    function waitForDependencies(callback, timeout = 15000) {
         const start = Date.now();
         const check = () => {
             if (window.AVS_Storage && window.AVS_CONFIG && window.AVS_Ghost) {
                 callback();
             } else if (Date.now() - start > timeout) {
-                console.error('[AVS-UI] Dependencies not loaded after timeout', {
+                console.error('[AVS-UI] Dependencies timeout', {
                     storage: !!window.AVS_Storage,
                     config: !!window.AVS_CONFIG,
                     ghost: !!window.AVS_Ghost
                 });
             } else {
-                setTimeout(check, 50); // Kiểm tra nhanh hơn
+                setTimeout(check, 100);
             }
         };
         check();
     }
 
-    // Định nghĩa class AVSApp (giữ nguyên logic, nhưng đảm bảo gán vào window)
     class AVSApp {
         constructor() {
             const saved = window.AVS_Storage.get('settings', {});
@@ -59,7 +57,6 @@
         }
 
         setupUI() {
-            // Tìm nút float đã có
             this.floatBtn = document.getElementById('avs-float-btn');
             if (!this.floatBtn) {
                 console.warn('[AVS-UI] Float button missing, creating...');
@@ -136,22 +133,16 @@
                         <h3 class="avs-title">⚡ Bộ Lọc Đa Năng V${config.version}</h3>
                         <div class="avs-close">×</div>
                     </div>
-
                     <div class="avs-sec-label">Loại Phim</div>
                     <div class="avs-grid" id="grp-type">${typeChips}</div>
-
                     <div class="avs-sec-label">Mùa</div>
                     <div class="avs-grid" id="grp-season">${seasonChips}</div>
-
                     <div class="avs-sec-label">Năm</div>
                     <div class="avs-grid" id="grp-year">${yearAllChip}${yearChips}</div>
-
                     <div class="avs-sec-label">Thể Loại (Chọn nhiều)</div>
                     <input type="text" id="avs-genre-search" placeholder="🔍 Tìm kiếm thể loại...">
                     <div class="avs-grid" id="grp-genre">${genreChips}</div>
-
                     ${settingsHTML}
-
                     <button class="avs-btn-apply" id="avs-apply">🚀 LỌC PHIM NGAY</button>
                 </div>
             `;
@@ -165,7 +156,6 @@
             const onMouseDown = (e) => {
                 if (e.button !== 0) return;
                 e.preventDefault();
-
                 isDragging = false;
                 startX = e.clientX;
                 startY = e.clientY;
@@ -194,7 +184,6 @@
                     document.removeEventListener('mousemove', onMouseMove);
                     document.removeEventListener('mouseup', onMouseUp);
                     this.floatBtn.classList.remove('dragging');
-
                     if (!isDragging) {
                         this.overlay.classList.add('active');
                     } else {
@@ -230,7 +219,6 @@
                 chip.addEventListener('click', function() {
                     const group = this.closest('[id^="grp-"]');
                     if (!group) return;
-
                     if (group.id === 'grp-genre') {
                         this.classList.toggle('active');
                         if (searchInput && searchInput.value) {
@@ -313,19 +301,14 @@
                 const active = document.querySelector(`#${groupId} .avs-chip.active`);
                 return active ? active.dataset.val : 'all';
             };
-
             const type = getSelectedVal('grp-type');
             const genreChips = document.querySelectorAll('#grp-genre .avs-chip.active');
             const genres = genreChips.length ? Array.from(genreChips).map(c => c.dataset.val).join('-') : 'all';
             const season = getSelectedVal('grp-season');
             const year = getSelectedVal('grp-year');
-
             const url = `${window.location.origin}/danh-sach/${type}/${genres}/${season}/${year}/`;
             this.showToast('🔄 Đang lọc phim...');
-
-            setTimeout(() => {
-                window.location.href = url;
-            }, 500);
+            setTimeout(() => { window.location.href = url; }, 500);
         }
 
         setupEventListeners() {
@@ -345,14 +328,10 @@
 
         setupHotkeys() {
             document.addEventListener('keydown', (e) => {
-                if (document.activeElement.tagName === 'INPUT' || document.activeElement.tagName === 'TEXTAREA') {
-                    return;
-                }
-
+                if (document.activeElement.tagName === 'INPUT' || document.activeElement.tagName === 'TEXTAREA') return;
                 const key = e.key;
                 const video = document.querySelector('video');
                 const shortcuts = this.settings.shortcuts;
-
                 if (key === shortcuts.ghost) {
                     const player = this.getPlayer();
                     if (player) {
@@ -360,7 +339,6 @@
                         this.showToast(player.classList.contains('avs-ghost-active') ? '👻 Ghost Mode ON' : '👀 Ghost Mode OFF');
                     }
                 }
-
                 if (key === 's' && !e.shiftKey) {
                     e.preventDefault();
                     const skipBtn = document.querySelector(window.AVS_CONFIG.player.skipButtons.join(','));
@@ -372,15 +350,10 @@
                         this.showToast(`⏩ +${this.settings.skipTime}s`);
                     }
                 }
-
                 if (key === 'S' && e.shiftKey) {
                     e.preventDefault();
-                    if (video) {
-                        video.currentTime = Math.max(0, video.currentTime - 90);
-                        this.showToast('⏪ -90s');
-                    }
+                    if (video) video.currentTime = Math.max(0, video.currentTime - 90);
                 }
-
                 if (key === 'ArrowRight' && video) {
                     e.preventDefault();
                     video.currentTime += 5;
@@ -391,7 +364,6 @@
                     video.currentTime -= 5;
                     this.showToast('⏪ -5s');
                 }
-
                 if (key === 'ArrowUp' && video) {
                     e.preventDefault();
                     const step = this.settings.volumeStep || 5;
@@ -406,7 +378,6 @@
                     video.volume = newVol;
                     this.showVolumeToast(newVol * 100);
                 }
-
                 if (key === shortcuts.toggleFilter) {
                     this.overlay.classList.toggle('active');
                 }
@@ -420,20 +391,10 @@
                 toast.id = 'avs-toast';
                 document.body.appendChild(toast);
             }
-            toast.innerHTML = `
-                <div class="avs-volume-toast">
-                    <span>🔊</span>
-                    <div class="avs-volume-bar">
-                        <div class="avs-volume-fill" style="width: ${percent}%;"></div>
-                    </div>
-                    <span>${Math.round(percent)}%</span>
-                </div>
-            `;
+            toast.innerHTML = `<div class="avs-volume-toast"><span>🔊</span><div class="avs-volume-bar"><div class="avs-volume-fill" style="width:${percent}%;"></div></div><span>${Math.round(percent)}%</span></div>`;
             toast.style.opacity = '1';
             clearTimeout(this.volumeToastTimeout);
-            this.volumeToastTimeout = setTimeout(() => {
-                toast.style.opacity = '0';
-            }, 1500);
+            this.volumeToastTimeout = setTimeout(() => { toast.style.opacity = '0'; }, 1500);
         }
 
         showToast(text, duration = 3000) {
@@ -446,9 +407,7 @@
             toast.innerHTML = text;
             toast.style.opacity = '1';
             clearTimeout(this.toastTimeout);
-            this.toastTimeout = setTimeout(() => {
-                toast.style.opacity = '0';
-            }, duration);
+            this.toastTimeout = setTimeout(() => { toast.style.opacity = '0'; }, duration);
         }
 
         applyTheme(theme) {
@@ -456,14 +415,12 @@
         }
     }
 
-    // Chờ dependencies và khởi tạo
+    // Khởi tạo khi dependencies sẵn sàng
     waitForDependencies(() => {
-        console.log('[AVS-UI] All dependencies ready, initializing UI...');
+        console.log('[AVS-UI] Dependencies ready, initializing UI...');
         window.AVS_UI = AVSApp;
-        // Chỉ khởi tạo một lần
-        if (!window._avsUiInitialized) {
-            window._avsUiInitialized = true;
-            new AVSApp();
-        }
+        // Tự động khởi tạo một instance
+        new AVSApp();
     });
+
 })();
