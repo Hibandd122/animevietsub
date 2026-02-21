@@ -1,11 +1,3 @@
-// ==UserScript==
-// @name         AVS UI
-// @namespace    https://github.com/Hibandd122/animevietsub
-// @version      1.3
-// @description  UI components and main logic (filter, settings, hotkeys) – no bookmark. Đã sửa lỗi tạo nút float.
-// @author       HolaCanh
-// ==/UserScript==
-
 window.AVS_UI = class AVSApp {
     constructor() {
         const saved = window.AVS_Storage.get('settings', {});
@@ -32,25 +24,19 @@ window.AVS_UI = class AVSApp {
         this.applyTheme(this.settings.theme);
         window.AVS_Ghost.setupFullscreenListener(this);
         window.AVS_Ghost.setupPlayerObserver(this);
-
         this.showToast(`✨ AVS Ultimate V${window.AVS_CONFIG.version} đã sẵn sàng!`);
     }
 
     setupUI() {
-        // Nếu nút float đã tồn tại (do fallback), thì không tạo lại
-        if (document.getElementById('avs-float-btn')) {
-            this.floatBtn = document.getElementById('avs-float-btn');
-            // Gỡ bỏ fallback style để tránh xung đột
-            const fallbackStyle = document.getElementById('avs-fallback-style');
-            if (fallbackStyle) fallbackStyle.remove();
-        } else {
+        // Nếu nút float đã tồn tại (do emergency), dùng lại, không tạo mới
+        this.floatBtn = document.getElementById('avs-float-btn');
+        if (!this.floatBtn) {
             this.floatBtn = document.createElement('div');
             this.floatBtn.id = 'avs-float-btn';
             this.floatBtn.innerHTML = '⚡';
             document.body.appendChild(this.floatBtn);
         }
 
-        // Load vị trí đã lưu
         const savedPos = window.AVS_Storage.get('floatPos', null);
         if (savedPos && typeof savedPos.left === 'number' && typeof savedPos.top === 'number') {
             this.floatBtn.style.left = savedPos.left + 'px';
@@ -59,7 +45,6 @@ window.AVS_UI = class AVSApp {
             this.floatBtn.style.bottom = 'auto';
         }
 
-        // Tạo overlay
         this.overlay = document.createElement('div');
         this.overlay.id = 'avs-overlay';
         this.overlay.innerHTML = this.generatePanelHTML();
