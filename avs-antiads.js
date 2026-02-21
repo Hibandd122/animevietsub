@@ -1,11 +1,3 @@
-// ==UserScript==
-// @name         AVS AntiAds
-// @namespace    https://github.com/Hibandd122/animevietsub
-// @version      1.1
-// @description  Anti-ad system
-// @author       HolaCanh
-// ==/UserScript==
-
 window.AVS_AntiAds = class AntiAds {
     constructor() {
         this.initCookies();
