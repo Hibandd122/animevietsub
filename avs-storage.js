@@ -1,58 +1,51 @@
 // ==UserScript==
-// @name         AVS AntiAds
+// @name         AVS Storage
 // @namespace    https://github.com/Hibandd122/animevietsub
-// @version      1.0
-// @description  Anti-ad system
+// @version      1.1
+// @description  Storage manager for AVS (GM + localStorage)
 // @author       HolaCanh
 // ==/UserScript==
 
-window.AVS_AntiAds = class AntiAds {
-    constructor() {
-        this.initCookies();
-        this.hijackWindowOpen();
-        this.initObserver();
-    }
-
-    initCookies() {
-        const config = window.AVS_CONFIG;
-        config.ads.cookieFakes.forEach(c => {
-            const date = new Date();
-            date.setTime(date.getTime() + (c.days * 24 * 60 * 60 * 1000));
-            document.cookie = `${c.name}=${c.value}; expires=${date.toUTCString()}; path=/`;
-        });
-    }
-
-    hijackWindowOpen() {
-        const config = window.AVS_CONFIG;
-        const originalOpen = window.open;
-        window.open = function(url, target, features) {
-            if (url && typeof url === 'string') {
-                if (config.ads.blockPatterns.some(p => p.test(url))) {
-                    console.warn('[AVS] 🚫 Blocked popup:', url);
-                    return null;
+window.AVS_Storage = {
+    get: function(key, defaultValue) {
+        try {
+            if (typeof GM_getValue !== 'undefined') {
+                let val = GM_getValue(`avs6_${key}`, null);
+                if (val !== null) return val;
+            }
+            const lsVal = localStorage.getItem(`avs6_${key}`);
+            return lsVal ? JSON.parse(lsVal) : defaultValue;
+        } catch (e) {
+            console.warn('[AVS] Storage get error:', e);
+            return defaultValue;
+        }
+    },
+    set: function(key, value) {
+        try {
+            if (typeof GM_setValue !== 'undefined') {
+                GM_setValue(`avs6_${key}`, value);
+            }
+            localStorage.setItem(`avs6_${key}`, JSON.stringify(value));
+        } catch (e) {
+            console.warn('[AVS] Storage set error:', e);
+        }
+    },
+    getAllKeys: function(prefix) {
+        let keys = [];
+        try {
+            if (typeof GM_listValues !== 'undefined') {
+                let all = GM_listValues();
+                keys = all.filter(k => k.startsWith(`avs6_${prefix}`));
+            }
+        } catch (e) {}
+        try {
+            for (let i = 0; i < localStorage.length; i++) {
+                let key = localStorage.key(i);
+                if (key && key.startsWith(`avs6_${prefix}`)) {
+                    keys.push(key);
                 }
             }
-            return originalOpen.apply(this, arguments);
-        };
-    }
-
-    initObserver() {
-        const config = window.AVS_CONFIG;
-        const observer = new MutationObserver((mutations) => {
-            mutations.forEach(m => {
-                m.addedNodes.forEach(node => {
-                    if (node.nodeType === 1) {
-                        config.ads.selectors.forEach(sel => {
-                            if (node.matches && node.matches(sel)) {
-                                node.remove();
-                            } else if (node.querySelectorAll) {
-                                node.querySelectorAll(sel).forEach(el => el.remove());
-                            }
-                        });
-                    }
-                });
-            });
-        });
-        observer.observe(document.documentElement, { childList: true, subtree: true });
+        } catch (e) {}
+        return [...new Set(keys)];
     }
 };
